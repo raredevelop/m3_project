@@ -12,8 +12,8 @@ class UserPack(ObjectPack):
     filter_engine_clz = ColumnFilterEngine
 
     f = partial(FilterByField, model)
-    # add_window = UserAddWindow
-    add_window = ModelEditWindow.fabricate(model=model)
+    # add_window = edit_window = UserAddWindow
+    add_window = edit_window = ModelEditWindow.fabricate(model=model)
 
     add_to_menu = True
     add_to_desktop = True
@@ -67,7 +67,7 @@ class GroupPack(ObjectPack):
 
     filter_engine_clz = ColumnFilterEngine
     f = partial(FilterByField, model)
-    add_window = ModelEditWindow.fabricate(model=model)
+    add_window = edit_window = ModelEditWindow.fabricate(model=model)
 
     add_to_menu = True
     add_to_desktop = True
