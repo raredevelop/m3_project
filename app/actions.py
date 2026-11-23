@@ -1,6 +1,6 @@
 from functools import partial
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from objectpack.actions import ObjectPack
 from objectpack.filters import ColumnFilterEngine, FilterByField
 from objectpack.ui import ModelEditWindow
@@ -14,6 +14,9 @@ class UserPack(ObjectPack):
     f = partial(FilterByField, model)
     # add_window = UserAddWindow
     add_window = ModelEditWindow.fabricate(model=model)
+
+    add_to_menu = True
+    add_to_desktop = True
 
     columns = [  # noqa: RUF012
         {
@@ -58,6 +61,23 @@ class UserPack(ObjectPack):
         },
     ]
 
-    # разрешим добавлять ссылку на list_window в меню Desktop'а
+
+class GroupPack(ObjectPack):
+    model = Group
+
+    filter_engine_clz = ColumnFilterEngine
+    f = partial(FilterByField, model)
+    add_window = ModelEditWindow.fabricate(model=model)
+
     add_to_menu = True
     add_to_desktop = True
+
+    columns = [  # noqa: RUF012
+        {
+            "data_index": "name",
+            "header": "name",
+            "searchable": True,
+            "sortable": True,
+            "filter": (f("name")),
+        },
+    ]
