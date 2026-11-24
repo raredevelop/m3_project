@@ -2,7 +2,7 @@
 
 ## Установка
 
-0. Установить Python на Linux:
+0. Установите Python на Linux:
 ```bash
 apt install -y software-properties-common
 add-apt-repository ppa:deadsnakes/ppa
