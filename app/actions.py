@@ -2,6 +2,8 @@ from functools import partial
 
 from django.contrib.auth.models import Group, Permission, User
 from django.contrib.contenttypes.models import ContentType
+from django.http import HttpRequest
+from m3.actions.exceptions import ApplicationLogicException
 from objectpack.actions import ObjectPack
 from objectpack.filters import ColumnFilterEngine, FilterByField
 from objectpack.ui import ModelEditWindow
@@ -62,6 +64,18 @@ class UserPack(ObjectPack):
             ),
         },
     ]
+
+    def save_row(self, obj: User, create_new: bool, request: HttpRequest, context):
+        password = request.POST.get("new_password", "")
+
+        if create_new and not password:
+            raise ApplicationLogicException(
+                "При создании нового юзера надо создать пароль"
+            )
+
+        if password:
+            obj.set_password(password)
+        super().save_row(obj, create_new, request, context)
 
 
 class GroupPack(ObjectPack):

@@ -10,7 +10,11 @@ class UserAddWindow(BaseEditWindow):
         super()._init_components()
 
         self.field__password = ext.ExtStringField(
-            label="password", name="password", allow_blank=False, anchor="100%"
+            label="password",
+            name="new_password",
+            allow_blank=True,
+            anchor="100%",
+            input_type="password",
         )
 
         self.field__last_login = ext.ExtDateField(
