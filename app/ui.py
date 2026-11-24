@@ -21,7 +21,7 @@ class UserAddWindow(BaseEditWindow):
             format="d.m.Y",
         )
         self.field__is_superuser = ext.ExtCheckBox(
-            label="superuser status", name="is_super_user"
+            label="superuser status", name="is_superuser"
         )
         self.field__username = ext.ExtStringField(
             label="username", name="username", allow_blank=False, anchor="100%"
