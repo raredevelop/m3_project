@@ -1,9 +1,13 @@
 from functools import partial
 
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group, Permission, User
+from django.contrib.contenttypes.models import ContentType
 from objectpack.actions import ObjectPack
 from objectpack.filters import ColumnFilterEngine, FilterByField
 from objectpack.ui import ModelEditWindow
+
+from app.controller import observer
+from app.ui import UserAddWindow
 
 
 class UserPack(ObjectPack):
@@ -12,8 +16,8 @@ class UserPack(ObjectPack):
     filter_engine_clz = ColumnFilterEngine
 
     f = partial(FilterByField, model)
-    # add_window = edit_window = UserAddWindow
-    add_window = edit_window = ModelEditWindow.fabricate(model=model)
+    add_window = edit_window = UserAddWindow
+    # add_window = edit_window = ModelEditWindow.fabricate(model=model)
 
     add_to_menu = True
     add_to_desktop = True
@@ -44,12 +48,10 @@ class UserPack(ObjectPack):
         {
             "data_index": "is_staff",
             "header": "is_staff",
-            # "filter": (f("is_staff")),
         },
         {
             "data_index": "is_active",
             "header": "is_active",
-            # "filter": (f("is_active")),
         },
         {
             "data_index": "date_joined",
@@ -79,5 +81,54 @@ class GroupPack(ObjectPack):
             "searchable": True,
             "sortable": True,
             "filter": (f("name")),
+        },
+    ]
+
+
+class PermissionPack(ObjectPack):
+    model = Permission
+
+    filter_engine_clz = ColumnFilterEngine
+    f = partial(FilterByField, model, model_register=observer)
+    add_window = edit_window = ModelEditWindow.fabricate(
+        model=model, model_register=observer
+    )
+
+    add_to_menu = True
+    add_to_desktop = True
+
+    columns = [  # noqa: RUF012
+        {
+            "data_index": "__str__",
+            "header": "Наименование",
+        },
+    ]
+
+
+class ContentTypePack(ObjectPack):
+    model = ContentType
+
+    filter_engine_clz = ColumnFilterEngine
+    f = partial(FilterByField, model)
+    add_window = edit_window = ModelEditWindow.fabricate(model=model)
+
+    add_to_menu = True
+    add_to_desktop = True
+
+    columns = [  # noqa: RUF012
+        {"data_index": "__str__", "header": "Наименование", "hidden": True},
+        {
+            "data_index": "app_label",
+            "header": "app_label",
+            "searchable": True,
+            "sortable": True,
+            "filter": (f("app_label")),
+        },
+        {
+            "data_index": "model",
+            "header": "model",
+            "searchable": True,
+            "sortable": True,
+            "filter": (f("model")),
         },
     ]

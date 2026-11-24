@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from objectpack import desktop
 
-from app.actions import GroupPack, UserPack
+from app.actions import ContentTypePack, GroupPack, PermissionPack, UserPack
 from app.controller import controller
 
 
@@ -16,7 +16,14 @@ def register_actions():
     """
     Регистрация экшен-паков
     """
-    return controller.packs.extend([UserPack(), GroupPack()])
+    return controller.packs.extend(
+        [
+            UserPack(),
+            GroupPack(),
+            ContentTypePack(),
+            PermissionPack(),
+        ]
+    )
 
 
 def register_desktop_menu():
